@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="POST" enctype="multipart/form-data" class="user-profile-form" action="userProfile" style="padding-top:120px;">
+    {% csrf_token %}
+  
+    <div class="form-field">
+      <label for="email">Email:</label>
+      <input type="email" name="email" id="email" value="" required>
+    </div>
+  
+    <div class="form-field">
+      <label for="profile_pic">Profile Picture:</label>
+      <input type="file" name="profile_picture" id="profile_pic" value="{{user_profile.profile_pic.url}}">
+    </div>
+  
+    <div class="form-field">
+      <label for="bio">Bio:</label>
+      <textarea name="bio" id="bio">{{user_profile.bio}}</textarea>
+    </div>
+  
+    <button type="submit">Save</button>
+  </form>
+  
+{% endblock  %}

@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<ul>
+    {% for user in likeUser %}
+    <li>{{user}}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
