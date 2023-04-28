@@ -13,6 +13,7 @@ def home(request):
         pk = request.POST['post-id']
         postL = Post.objects.get(id=pk)
         like = Like.objects.filter(user=request.user,post=postL).first()
+        print('ajax pass this section')
         if like:
             like.delete()
             postL.like_decrement()
