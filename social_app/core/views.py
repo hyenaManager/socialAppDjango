@@ -9,10 +9,31 @@ from .models import *
 # Create your views here.
 
 def home(request):
+    if request.method == 'POST':
+        pk = request.POST['post-id']
+        postL = Post.objects.get(id=pk)
+        like = Like.objects.filter(user=request.user,post=postL).first()
+        if like:
+            like.delete()
+            postL.like_decrement()
+            like.noti = str(request.user.username)+' unlike your post'
+        else:
+            Like.objects.create(
+            user = request.user,post=postL,
+            noti = str(request.user.username)+' like your post',
+            postOwner = postL.user)
+            postL.like_increment()
     posts = Post.objects.all()
     pP = UserProfile.objects.get(user = request.user.id)
     likeNoti = Like.objects.filter(postOwner = request.user.username)
-    return render(request,'home.html',{'user_name':request.user,'posts':posts,"userP":pP,"notifications":likeNoti})
+    context = {
+        'user_name': request.user,
+        'posts': posts,
+        'userP': pP,
+        'notifications': likeNoti,
+        'post': posts.first(), # pass the first post object to the context
+    }
+    return render(request,'home.html',context)
 
 @csrf_exempt
 def register(request):
@@ -76,18 +97,20 @@ def create_userPp(request):
         "user_profile":userP
     })
 def like(request,pk):
-    post = Post.objects.get(id=pk)
-    like = Like.objects.filter(user=request.user,post=post).first()
-    if like:
-        like.delete()
-        post.like_decrement()
-        like.noti = str(request.user.username)+' unlike your post'
-    else:
-        Like.objects.create(
-            user = request.user,post=post,
-            noti = str(request.user.username)+' like your post',
-            postOwner = post.user)
-        post.like_increment()
+    if request.method == 'POST':
+        pk = request.POST['post_id']
+        post = Post.objects.get(id=pk)
+        like = Like.objects.filter(user=request.user,post=post).first()
+        if like:
+            like.delete()
+            post.like_decrement()
+            like.noti = str(request.user.username)+' unlike your post'
+        else:
+            Like.objects.create(
+                user = request.user,post=post,
+                noti = str(request.user.username)+' like your post',
+                postOwner = post.user)
+            post.like_increment()
 
     return redirect('home')
 

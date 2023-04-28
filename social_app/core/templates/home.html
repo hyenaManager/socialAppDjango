@@ -27,7 +27,7 @@
         </div>
         <p id="like-button-container"></p>
         <div class="post-footer">
-            <div><a href="like{{post.id}}" id="likeIn"><i class="fa fa-thumbs-up" style="font-size:24px"></i></a> <a href="liked_user">{{post.like_count}}</a></div>
+            <div><button id="like-btn" post-id = "{{post.id}}"><i class="fa fa-thumbs-up" style="font-size:24px"></i></button> <a>{{post.like_count}}</a></div>
             <div><a href="#">Comment</a> {{comment}}</div>
             <div><a href="#">Share</a> {{share}}</div>
         </div>
@@ -35,7 +35,7 @@
       {% endfor %}
       
     
-        <button class="floating-circle" title="Create Post" id="createBtn" onlclick="create()">
+        <button class="floating-circle" title="Create Post" id="createBtn">
           <a href="create_post"><div class="plus-sign">+</div></a>
         </button>
     </div>
@@ -64,4 +64,27 @@
       </div>
     </div>
 </div>
+<script>
+  $(document).ready(function() {
+    $('#like-btn').click(function() {
+      var postId = $(this).data('post-id');
+      $.ajax({
+        type: 'POST',
+        url: '{% url "home" %}',
+        data: {
+          'post-id': postId,
+          'csrfmiddlewaretoken': '{{ csrf_token }}'
+        },
+        success: function(response) {
+          // Update the like count
+          $('#like-count-container').html('Likes: ' + response.like_count);
+        },
+        error: function(response) {
+          console.log(response);
+        }
+      });
+    });
+  });
+  
+  </script>
 {% endblock  %}

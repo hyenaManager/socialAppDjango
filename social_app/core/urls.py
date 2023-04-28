@@ -6,5 +6,5 @@ urlpatterns = [
     path('create_post',create_post,name="create_post"),
     path('userProfile',create_userPp,name="userProfile"),
     path('login',login_view,name="login"),
-    path('like<int:pk>',like,name='like'),
+    path('like',like,name='like'),
 ]
