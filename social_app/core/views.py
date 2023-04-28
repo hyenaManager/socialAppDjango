@@ -44,12 +44,15 @@ def login_view(request):
         form = AuthenticationForm()
     return render(request, 'login.html', {'form': form})
 
+@csrf_exempt
 def create_post(request):
     if request.method == 'POST':
         title = request.POST['title']
         content = request.POST['content']
+        userP = UserProfile.objects.get(user = request.user)
         post = Post.objects.create(
             user = request.user,
+            user_profile = userP,
             title=title,
             content=content,
             # user_id = request.user.id its only used when we do not set the foreignkey
@@ -65,7 +68,6 @@ def create_userPp(request):
         userP = UserProfile.objects.get(user=request.user.id)
         if request.FILES.get('profile_picture') != None:
             userP.profile_pic = profile_pict
-        userP.profile_pic = userP.profile_pic
         userP.bio = userBio
         userP.save()
         return redirect('home')

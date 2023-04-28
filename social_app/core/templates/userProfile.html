@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form method="POST" enctype="multipart/form-data" class="user-profile-form" action="userProfile" style="padding-top:120px;">
+<form method="post" enctype="multipart/form-data" class="user-profile-form" action="userProfile" style="padding-top:120px;">
     {% csrf_token %}
   
     <div class="form-field">

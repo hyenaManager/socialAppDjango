@@ -14,13 +14,14 @@
       {% for post in posts %}
       <div class="post">
         <div class="post-header">
-            <img src="{{userP.profile_pic.url}}" alt="Profile Picture">
+            <img src="{{post.user_pic.url}}" alt="Profile Picture">
             <div class="post-header-info">
                 <h2>{{post.user}}</h2>
                 <p>{{created_at}}</p>
             </div>
         </div>
         <div class="post-body">
+          <h5>{{post.title}}</h5>
           <p>{{post.content}}</p>
           {% comment %} <img src="{{post.image.url}}" alt="Post Image"> {% endcomment %}
         </div>

@@ -40,8 +40,8 @@ class Post(models.Model):
     updated_at = models.DateField(auto_now=True)
     like_count = models.PositiveIntegerField(default=0)
 
-    # def userProfile(self):
-    #     return self.user.profile_pic
+    def user_pic(self):
+        return self.user_profile.profile_pic
     
     def userName(self):
         return self.user.user
