@@ -1,0 +1,9 @@
+/* Set the overflow property to "scroll" to make the element scrollable */
+.element {
+    overflow: scroll;
+}
+  
+  /* Hide the scroll bar */
+.element::-webkit-scrollbar {
+    display: none;
+}

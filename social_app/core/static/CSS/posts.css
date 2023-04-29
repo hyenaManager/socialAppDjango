@@ -3,6 +3,15 @@
     border-radius: 5px;
     margin-bottom: 20px;
     padding: 10px;
+    /* overflow: scroll;
+    max-height: 400px; */
+}
+/* .postS::-webkit-scrollbar {
+    width: 0px;
+    background-color: transparent;
+} */
+#scroll{
+    max-height: 300px;
 }
 
 .post-header {
@@ -41,3 +50,6 @@
     display: flex;
     justify-content: space-between;
 }
+/* Set the overflow property to "scroll" to make the element scrollable */
+  
+  /* Hide the scroll bar */

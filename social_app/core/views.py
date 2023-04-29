@@ -10,13 +10,12 @@ from .models import *
 # Create your views here.
 
 def home(request):
-    print('ajax pass this section')
     if request.method == 'POST':
-        print(int(request.POST['post_id']))
+        # print(int(request.POST['post_id']))
         pk = int(request.POST['post_id'])
         postL = Post.objects.get(id=pk)
         like = Like.objects.filter(user=request.user,post=postL)
-        print('ajax pass this section')
+        # print('ajax pass this section')
         if like:
             like.delete()
             postL.like_decrement()
@@ -40,6 +39,25 @@ def home(request):
         'post': posts, # pass the first post object to the context
     }
     return render(request,'home.html',context)
+
+def view_post(request,pk):
+    get_post = Like.objects.get(id=pk)
+    get_postId = get_post.post.id
+    viewPost = Post.objects.get(id=get_postId)
+    posts = Post.objects.all()
+    pP = UserProfile.objects.get(user = request.user.id)
+    likeNoti = Like.objects.filter(postOwner = request.user.username)
+    context = {
+        'user_name': request.user,
+        'posts': posts,
+        'view_post':viewPost,
+        'userP': pP,
+        'notifications': likeNoti,
+        'post': posts, # pass the first post object to the context
+    }
+    return render(request,'home.html',context)
+
+
 
 @csrf_exempt
 def register(request):

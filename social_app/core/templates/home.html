@@ -4,15 +4,36 @@
 
 <div class="row " style ="margin-top:110px;">
     <div class="col border border-primary">
-      <div>
         {% for model in notifications %}
         <ul>
-          <li>{{model.noti}}</li>
+          <li>{{model.noti}}<a href="home{{model.id}}"> view post</a></li>
         </ul>
         {% endfor %}
-      </div>
     </div>
-    <div class="col-6 border border-primary">
+    <div class="col-6 border border-danger" style="">
+      {% if view_post %}
+      <div class="post">
+        <div class="post-header">
+            <img src="{{view_post.user_pic.url}}" alt="Profile Picture">
+            <div class="post-header-info">
+                <h2>{{view_post.user}}</h2>
+                <p id="successL"></p>
+            </div>
+        </div>
+        <div class="post-body">
+          <h5>{{view_post.title}}</h5>
+          <p>{{view_post.content}}</p>
+          {% comment %} <img src="{{post.image.url}}" alt="Post Image"> {% endcomment %}
+        </div>
+        <p id="like-button-container"></p>
+        <div class="post-footer">
+            <div style="display:none;" >{{view_post.id}}</div>
+            <div><button id="{{view_post.user}}" class="{{view_post.id}}" onclick="likeFunction('{{view_post.user}}','{{view_post.id}}')"><i class="fa fa-thumbs-up" style="font-size:24px"></i></button> <a id="{{view_post.id}}">{{view_post.like_count}}</a></div>
+            <div><a href="#">Comment</a> {{comment}}</div>
+            <div><a href="#">Share</a> {{share}}</div>
+        </div>
+      </div>
+      {% else %}
       {% for post in posts %}
       <div class="post">
         <div class="post-header">
@@ -36,12 +57,9 @@
         </div>
       </div>
       {% endfor %}
-      
-    
-        <button class="floating-circle" title="Create Post" id="createBtn">
-          <a href="create_post"><div class="plus-sign">+</div></a>
-        </button>
+      {% endif %}
     </div>
+
     <div class="col border border-primary">
       <div id="container">
         <img id="profile-pic" src="{{userP.profile_pic.url}}" alt="Profile Picture">
@@ -67,6 +85,9 @@
       </div>
     </div>
 </div>
+<button class="floating-circle" title="Create Post" id="createBtn">
+  <a href="create_post"><div class="plus-sign">+</div></a>
+</button>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script>
   function likeFunction(name,id){
