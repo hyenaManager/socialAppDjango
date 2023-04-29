@@ -6,7 +6,9 @@
     <div class="col border border-primary">
       <div>
         {% for model in notifications %}
-        <ul>{{model.noti}}</ul>
+        <ul>
+          <li>{{model.noti}}</li>
+        </ul>
         {% endfor %}
       </div>
     </div>
@@ -17,7 +19,7 @@
             <img src="{{post.user_pic.url}}" alt="Profile Picture">
             <div class="post-header-info">
                 <h2>{{post.user}}</h2>
-                <p>{{created_at}}</p>
+                <p id="successL"></p>
             </div>
         </div>
         <div class="post-body">
@@ -27,7 +29,8 @@
         </div>
         <p id="like-button-container"></p>
         <div class="post-footer">
-            <div><button id="like-btn" post-id = "{{post.id}}"><i class="fa fa-thumbs-up" style="font-size:24px"></i></button> <a>{{post.like_count}}</a></div>
+            <div style="display:none;" >{{post.id}}</div>
+            <div><button id="{{post.user}}" class="{{post.id}}" onclick="likeFunction('{{post.user}}','{{post.id}}')"><i class="fa fa-thumbs-up" style="font-size:24px"></i></button> <a id="{{post.id}}">{{post.like_count}}</a></div>
             <div><a href="#">Comment</a> {{comment}}</div>
             <div><a href="#">Share</a> {{share}}</div>
         </div>
@@ -64,27 +67,31 @@
       </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
 <script>
-  $(document).ready(function() {
-    $('#like-btn').click(function() {
-      var postId = $(this).data('post-id');
-      $.ajax({
-        type: 'POST',
-        url: '{% url "home" %}',
-        data: {
-          'post-id': postId,
-          'csrfmiddlewaretoken': '{{ csrf_token }}'
-        },
-        success: function(response) {
-          // Update the like count
-          $('#like-count-container').html('Likes: ' + response.like_count);
-        },
-        error: function(response) {
-          console.log(response);
-        }
-      });
+  function likeFunction(name,id){
+    $(document).ready(function(){
+      //$(`#${name}`).click(function() {
+        var postId = id;
+        $.ajax({
+          type: 'POST',
+          url: '{% url "home" %}',
+          data: {
+            'post_id': postId,
+            'testData':'testData',
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(response) {
+            // Update the like count
+            $(`#${id}`).text(response.like_count);
+            //$('ul').append($("<li></li>").text('notiF'));
+          },
+          error: function(response) {
+            console.log(response);
+          }
+        });
+      //});
     });
-  });
-  
+  };
   </script>
 {% endblock  %}

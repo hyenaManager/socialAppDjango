@@ -1,5 +1,6 @@
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
+from django.http import JsonResponse
 from django.shortcuts import render, redirect
 from .forms import RegistrationForm
 from django.contrib.auth.models import User
@@ -9,10 +10,12 @@ from .models import *
 # Create your views here.
 
 def home(request):
+    print('ajax pass this section')
     if request.method == 'POST':
-        pk = request.POST['post-id']
+        print(int(request.POST['post_id']))
+        pk = int(request.POST['post_id'])
         postL = Post.objects.get(id=pk)
-        like = Like.objects.filter(user=request.user,post=postL).first()
+        like = Like.objects.filter(user=request.user,post=postL)
         print('ajax pass this section')
         if like:
             like.delete()
@@ -24,6 +27,8 @@ def home(request):
             noti = str(request.user.username)+' like your post',
             postOwner = postL.user)
             postL.like_increment()
+        return JsonResponse({'success': True, 'like_count': postL.like_count})
+    print("if section end!")
     posts = Post.objects.all()
     pP = UserProfile.objects.get(user = request.user.id)
     likeNoti = Like.objects.filter(postOwner = request.user.username)
@@ -32,7 +37,7 @@ def home(request):
         'posts': posts,
         'userP': pP,
         'notifications': likeNoti,
-        'post': posts.first(), # pass the first post object to the context
+        'post': posts, # pass the first post object to the context
     }
     return render(request,'home.html',context)
 
