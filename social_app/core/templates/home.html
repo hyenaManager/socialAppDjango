@@ -6,7 +6,9 @@
     <div class="col border border-primary">
       <div>
         {% for model in notifications %}
-        <ul>{{model.noti}}</ul>
+        <ul>
+          <li>{{model.noti}}</li>
+        </ul>
         {% endfor %}
       </div>
     </div>
@@ -17,7 +19,7 @@
             <img src="{{post.user_pic.url}}" alt="Profile Picture">
             <div class="post-header-info">
                 <h2>{{post.user}}</h2>
-                <p>{{created_at}}</p>
+                <p id="successL"></p>
             </div>
         </div>
         <div class="post-body">
@@ -27,7 +29,8 @@
         </div>
         <p id="like-button-container"></p>
         <div class="post-footer">
-            <div><a href="like{{post.id}}" id="likeIn"><i class="fa fa-thumbs-up" style="font-size:24px"></i></a> <a href="liked_user">{{post.like_count}}</a></div>
+            <div style="display:none;" >{{post.id}}</div>
+            <div><button id="{{post.user}}" class="{{post.id}}" onclick="likeFunction('{{post.user}}','{{post.id}}')"><i class="fa fa-thumbs-up" style="font-size:24px"></i></button> <a id="{{post.id}}">{{post.like_count}}</a></div>
             <div><a href="#">Comment</a> {{comment}}</div>
             <div><a href="#">Share</a> {{share}}</div>
         </div>
@@ -35,7 +38,7 @@
       {% endfor %}
       
     
-        <button class="floating-circle" title="Create Post" id="createBtn" onlclick="create()">
+        <button class="floating-circle" title="Create Post" id="createBtn">
           <a href="create_post"><div class="plus-sign">+</div></a>
         </button>
     </div>
@@ -64,4 +67,31 @@
       </div>
     </div>
 </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+  function likeFunction(name,id){
+    $(document).ready(function(){
+      //$(`#${name}`).click(function() {
+        var postId = id;
+        $.ajax({
+          type: 'POST',
+          url: '{% url "home" %}',
+          data: {
+            'post_id': postId,
+            'testData':'testData',
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(response) {
+            // Update the like count
+            $(`#${id}`).text(response.like_count);
+            //$('ul').append($("<li></li>").text('notiF'));
+          },
+          error: function(response) {
+            console.log(response);
+          }
+        });
+      //});
+    });
+  };
+  </script>
 {% endblock  %}
