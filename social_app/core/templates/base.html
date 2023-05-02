@@ -60,6 +60,33 @@
 			</div>
 		  </nav>
 	</div>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script>
+  function likeFunction(name,id){
+    $(document).ready(function(){
+      //$(`#${name}`).click(function() {
+        var postId = id;
+        $.ajax({
+          type: 'POST',
+          url: '{% url "home" %}',
+          data: {
+            'post_id': postId,
+            'testData':'testData',
+            'csrfmiddlewaretoken': '{{ csrf_token }}'
+          },
+          success: function(response) {
+            // Update the like count
+            $(`#${id}`).text(response.like_count);
+            //$('ul').append($("<li></li>").text('notiF'));
+          },
+          error: function(response) {
+            console.log(response);
+          }
+        });
+      //});
+    });
+  };
+  </script>
 {% block content %}
 {% endblock %}
 </body>

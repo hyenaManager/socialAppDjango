@@ -57,6 +57,23 @@ def view_post(request,pk):
     }
     return render(request,'home.html',context)
 
+def view_profile(request,pk):
+    get_profile = UserProfile.objects.get(id=pk)
+    user_posts = Post.objects.filter(user = get_profile.user)
+    follower_users = get_profile.follower.all()
+    followed_users = get_profile.followed.all()
+    print('values',follower_users)
+    print('list',list(follower_users))
+    context = {
+        'userP':get_profile,
+        'posts':user_posts,
+        'follow':followed_users,
+        'follower':follower_users,
+        'count_follow':len(followed_users),
+        'count_follower':len(follower_users),
+    }
+    return render(request,'userPage.html',context)
+
 
 
 @csrf_exempt
@@ -138,5 +155,22 @@ def like(request,pk):
 
     return redirect('home')
 
-def notification(request):
-    pass
+def relationShip(request,pk):
+    pk = int(pk)
+    #post = Post.objects.get(id = pk)
+    userProfile = UserProfile.objects.get(id = pk)#for the other person
+    userProfile1 = UserProfile.objects.get(user = request.user)#for the user
+    relation = RelationShip.objects.filter(follower=request.user,followed=userProfile.user)
+    if relation:
+        relation.delete()
+        userProfile1.followed.remove(userProfile.user)
+        userProfile.follower.remove(userProfile1.user)
+    else:
+        RelationShip.objects.create(
+            follower = request.user,
+            followed = userProfile.user
+        )
+        userProfile1.followed.add(userProfile.user)
+        userProfile.follower.add(userProfile1.user)
+    return redirect('home')
+

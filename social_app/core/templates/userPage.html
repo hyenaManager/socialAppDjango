@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div id="container" style="margin-top:120px;">
+    <img id="profile-pic" src="{{userP.profile_pic.url}}" alt="Profile Picture">
+    <h1>{{user_name}}</h1>
+    
+    <div class="profile-details">
+      <p><b>Follower</b></p>
+      
+      <p>{{count_follower}}</p>
+      
+      <p><b>Following</b></p>
+      
+      <p>{{count_follow}}</p>
+      
+      
+    </div>
+    
+    <div class="bio">
+      <h2>Bio</h2>
+      <p>{{userP.bio}}</p>
+    </div>
+    
+    <h2>Interests</h2>
+    <ul>
+      {% for interest in user_interest %}
+      <li>{{interest}}</li>
+      {% endfor %}
+    </ul>
+    <button><a href="userProfile">Edit profile</a> </button>
+</div>
+
+{% for post in posts %}
+      <div class="post">
+        <div class="post-header">
+            <a href="view_profile{{post.profileId}}"><img src="{{post.user_pic.url}}" alt="Profile Picture"></a>
+            <div class="post-header-info">
+                <h2>{{post.user}}</h2>
+                <p id="successL"></p>
+            </div>
+        </div>
+        <div class="post-body">
+          <h5>{{post.title}}</h5>
+          <p>{{post.content}}</p>
+          {% comment %} <img src="{{post.image.url}}" alt="Post Image"> {% endcomment %}
+        </div>
+        <p id="like-button-container"></p>
+        <div class="post-footer">
+            <div style="display:none;" >{{post.id}}</div>
+            <div><button id="{{post.user}}" class="{{post.id}}" onclick="likeFunction('{{post.user}}','{{post.id}}')"><i class="fa fa-thumbs-up" style="font-size:24px"></i></button>
+              {% if post.like_count > 0 %}
+              <a id="{{post.id}}">{{post.like_count}}</a>
+              {% endif %}
+            </div>
+            <div><a href="#">Comment</a> {{comment}}</div>
+            <div><a href="#">Share</a> {{share}}</div>
+        </div>
+      </div>
+{% endfor %}
+{% endblock content %}

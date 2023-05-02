@@ -23,6 +23,8 @@ class UserProfile(models.Model):
     twitter_handle = models.CharField(max_length=50, blank=True,default='no twitter')
     facebook_handle = models.CharField(max_length=50, blank=True,default='no facebook')
     instagram_handle = models.CharField(max_length=50, blank=True,default='no instagram')
+    followed = models.ManyToManyField(User,related_name='followed_users',blank=True)
+    follower = models.ManyToManyField(User,related_name='follower_users',blank=True)
 
     class Meta:
         ordering = ['user']
@@ -53,12 +55,18 @@ class Post(models.Model):
     def like_decrement(self):
         self.like_count -=1
         self.save()
+    def profileId(self):
+        return self.user_profile.id
 
 class Like(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     noti = models.TextField(default='someone like your post')
     postOwner = models.CharField(max_length=100)
+
+class RelationShip(models.Model):
+    follower = models.ForeignKey(User,related_name='follower',on_delete=models.CASCADE)
+    followed = models.ForeignKey(User,related_name='followed_user',on_delete=models.CASCADE)
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
