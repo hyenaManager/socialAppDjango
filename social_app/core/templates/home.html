@@ -39,7 +39,16 @@
         <div class="post-header">
             <a href="view_profile{{post.profileId}}"><img src="{{post.user_pic.url}}" alt="Profile Picture"></a>
             <div class="post-header-info">
-                <h2>{{post.user}}<a class="form-control pointer" href="relationShip{{post.profileId}}" style="text-decoration:none;cursor:pointer;">follow</a></h2>
+                <h2>
+                  {{post.user}}
+                  <a class="form-control pointer" href="relationShip{{post.profileId}}" style="text-decoration:none;cursor:pointer;">
+                    {% if post.user in user_names%}
+                    unfollow
+                    {% else %}
+                    follow
+                    {% endif %}
+                    
+                  </a></h2>
                 <p id="successL"></p>
             </div>
         </div>

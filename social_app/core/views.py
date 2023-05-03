@@ -1,3 +1,4 @@
+import pandas
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate, login
 from django.http import JsonResponse
@@ -27,16 +28,23 @@ def home(request):
             postOwner = postL.user)
             postL.like_increment()
         return JsonResponse({'success': True, 'like_count': postL.like_count})
-    print("if section end!")
     posts = Post.objects.all()
-    pP = UserProfile.objects.get(user = request.user.id)
+    pP = UserProfile.objects.get(user=request.user.id)
+
+    # get a list of usernames that the current user follows
+    followings = pP.followed.values()
+    followings = list(followings)
+    followings = pandas.DataFrame(followings)
+    user_names = followings[['username']].to_dict('list')
+    user_names = user_names['username']
+    print(user_names)
     likeNoti = Like.objects.filter(postOwner = request.user.username)
     context = {
         'user_name': request.user,
         'posts': posts,
         'userP': pP,
-        'notifications': likeNoti,
-        'post': posts, # pass the first post object to the context
+        'notifications': likeNoti,# pass the first post object to the context
+        'user_names':user_names,
     }
     return render(request,'home.html',context)
 
